@@ -54,7 +54,6 @@ def put_game_actions(currentTurn, actions):
     request['currentTurn'] = currentTurn
     request['actions']     = actions
     request_json = json.dumps(request)
-    print(request_json)
     response = requests.post(get_game_action_url(), headers=get_headers(), data=request_json)
     return json.loads(response.text)
 
@@ -63,7 +62,7 @@ def print_state2array(state):
         for j in range(5):
             item = state['map'][i * 5 + j]
             if ('gamer' in item) and item['gamer'] != None:
-                if item['gamer'] == "Shrekosaur":
+                if item['gamer']['name'] == "Shrekosaur":
                     sys.stdout.write("X")
                 else:
                     sys.stdout.write("g")
@@ -76,7 +75,7 @@ def print_state2array(state):
         print("")    
     print("-----------------------")        
 
-current_direction = 0
+current_direction = 3
 
 def get_direction(state):
     global current_direction
@@ -94,7 +93,7 @@ def get_actions(state):
     return actions
 
 def is_valid_direction(direction, state):
-    indices = [6, 7, 8, 11, 13, 16, 17, 18]
+    indices = [6, 7, 8, 13, 18, 17, 16, 11]
     item    = state['map'][indices[direction]]
     if ('gamer' not in item or item['gamer'] == None) and item['isBorder'] == False:
         return True
@@ -103,12 +102,10 @@ def is_valid_direction(direction, state):
 if __name__ == "__main__":
     while True:
         state = get_game_state()
-        print(state['yourTurn'])
         if state['yourTurn'] == False:
             time.sleep(0.5)
             continue
 
-        print("action")
         actions  = get_actions(state)
         response = put_game_actions(state['currentTurn'], actions)
         print_state2array(state)
