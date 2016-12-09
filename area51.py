@@ -53,10 +53,6 @@ def get_actions(state):
     return ["goto1"]
     
 if __name__ == "__main__":
-    # state    = get_game_state()
-    # actions  = get_actions(state)
-    # response = put_game_actions(state['currentTurn'], actions)
-
     while True:
         state = get_game_state()
         print(state['yourTurn'], state['currentTurn'])
@@ -66,7 +62,7 @@ if __name__ == "__main__":
             continue
 
         actions  = get_actions(state)
-        response = put_game_action(state['currentTurn'], actions)
+        response = put_game_actions(state['currentTurn'], actions)
         print(response)
         
 
