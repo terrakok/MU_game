@@ -54,6 +54,7 @@ def put_game_actions(currentTurn, actions):
     request['currentTurn'] = currentTurn
     request['actions']     = actions
     request_json = json.dumps(request)
+    print(request_json)
     response = requests.post(get_game_action_url(), headers=get_headers(), data=request_json)
     return json.loads(response.text)
 
@@ -75,17 +76,17 @@ def print_state2array(state):
         print("")    
     print("-----------------------")        
 
-current_direction = None
+current_direction = 0
 
 def get_direction(state):
     global current_direction
-    if current_direction == None:
-        current_direction = randint(0, 7)
+    current_direction = int(current_direction + 1) % int(7)
     return current_direction
 
 def get_actions(state):
     actions = list()
-    direction = get_direction(state)
+    global current_direction
+    direction = current_direction
     while not is_valid_direction(direction, state):
         direction = get_direction(state)
         
@@ -102,10 +103,12 @@ def is_valid_direction(direction, state):
 if __name__ == "__main__":
     while True:
         state = get_game_state()
+        print(state['yourTurn'])
         if state['yourTurn'] == False:
             time.sleep(0.5)
             continue
 
+        print("action")
         actions  = get_actions(state)
         response = put_game_actions(state['currentTurn'], actions)
         print_state2array(state)
