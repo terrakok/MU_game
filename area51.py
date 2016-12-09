@@ -36,13 +36,18 @@ def get_game_state():
 
 def put_game_actions(currentTurn, actions):
     request = dict()
-    request['gameId']    = ids.get_game_id()
-    request['droidId']   = ids.get_droid_id()
-    request['currentId'] = currentTurn
-    request['actions']   = actions
+    request['gameId']      = ids.get_game_id()
+    request['droidId']     = ids.get_droid_id()
+    request['currentTurn'] = currentTurn
+    request['actions']     = actions
     request_json = json.dumps(request)
     response = requests.post(get_game_action_url(), headers=get_headers(), data=request_json)
     return json.loads(response.text)
+
+def state2array(state):
+    array = list()
+    for i in range
+
 
 def get_actions(state):
     return ["goto1"]
@@ -50,6 +55,7 @@ def get_actions(state):
 if __name__ == "__main__":
     while True:
         state = get_game_state()
+        state2array(state)
         print(state['yourTurn'], state['currentTurn'])
         
         if state['yourTurn'] == False:
