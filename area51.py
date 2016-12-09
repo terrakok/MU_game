@@ -80,7 +80,7 @@ current_direction = None
 def get_direction(state):
     global current_direction
     if current_direction == None:
-        current_direction = randint(0, 8)
+        current_direction = randint(0, 7)
     return current_direction
 
 def get_actions(state):
