@@ -210,7 +210,7 @@ def get_actions(state):
 if __name__ == "__main__":
     while True:
         state = get_game_state()
-        if state['yourTurn'] == False:
+        if 'yourTurn' in state and state['yourTurn'] == False:
             time.sleep(0.5)
             continue
 
