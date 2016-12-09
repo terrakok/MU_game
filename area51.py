@@ -94,12 +94,6 @@ def safe_cell(index, state):
     index_col = int(index % 5)
     for i in range(index_row - 1, index_row + 2):
         for j in range(index_col - 1, index_col + 2):
-            print("safe_cell:", state['map'][i * 5 + j])
-
-    sys.stdout.flush()
-
-    for i in range(index_row - 1, index_row + 2):
-        for j in range(index_col - 1, index_col + 2):
               if is_shreck(i * 5 + j, state):
                 return False
     return True
@@ -107,8 +101,8 @@ def safe_cell(index, state):
 def is_free(index, state):
     item = state['map'][index]
     if ('gamer' in item) and item['gamer'] != None:
-        return True
-    return False
+        return False
+    return True
 
 def free_cell(index, state):
     index_row = int(index / 5)
@@ -130,8 +124,8 @@ def is_valid_direction(direction, state):
 
 def turn_to_safe(state):
     indices = [6, 7, 8, 13, 18, 17, 16, 11]
-    # for i in range(0, 8):
-    #     print("turn_to_safe:", "(i, indices[i], flag):", i, indices[i], safe_cell(indices[i], state))
+    for i in range(0, 8):
+        print("turn_to_safe:", "(i, indices[i], flag):", i, indices[i], safe_cell(indices[i], state))
     for i in range(0, 8):
         if safe_cell(indices[i], state) and free_cell(indices[i], state):
             return "goto" + str(i + 1)
@@ -142,7 +136,7 @@ def is_danger_zone(state):
 def lookup_danger_zone(state):
     indices = [6, 7, 8, 13, 18, 17, 16, 11]
     for i in range(0, 8):
-        if not safe_cell(indices[i], state):
+        if not safe_cell(indices[i], state) and free_cell(indices[i], state):
             return i
     return None
 
