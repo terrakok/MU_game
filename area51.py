@@ -149,7 +149,7 @@ def lookup_shreck(direction, state):
     for i in range(index_row - 1, index_row + 2):
         for j in range(index_col - 1, index_col + 2):
             if is_shreck(i * 5 + j, state):
-                return diff2direction[(i - 1, j - 1)]
+                return diff2direction[(i - index_row, j - index_col)]
     print("lookup_shreck: ERRORR!!!")
     return -1
                 
