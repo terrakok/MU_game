@@ -163,7 +163,16 @@ def lookup_shreck(direction, state):
     print("lookup_shreck: ERRORR!!!")
     return -1
                 
-    
+
+def object_founded(state):
+    item = state['map'][12]
+    if 'object' in item:
+        if item['object']['name'] == 'Mushroom' or \
+           item['object']['name'] == 'Kicker' or \
+           item['object']['name'] == 'Cookie' or \
+           item['object']['name'] == 'Bra':
+            return True
+    return False
         
 def get_actions(state):
     actions = list()
@@ -177,12 +186,17 @@ def get_actions(state):
         print("get_actions: in safe zone")
         direction = lookup_danger_zone(state)
         if direction == None:
+            if object_founded(state):
+                print("object found")
+                actions.insert(0, "take")
+            
             print("get_actions: no danger zone found")
             global current_direction
             direction = current_direction
             while not is_valid_direction(direction, state):
                 direction = get_direction(state)
             actions.insert(0, "goto" + str(direction + 1))
+            
         else:
             print("get_actions: shreck founded (goto and joke)")
             print("directino = ", direction)
