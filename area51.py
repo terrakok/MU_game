@@ -105,14 +105,15 @@ def is_free(index, state):
     return True
 
 def free_cell(index, state):
-    index_row = int(index / 5)
-    index_col = int(index % 5)
-    for i in range(index_row - 1, index_row + 2):
-        for j in range(index_col - 1, index_col + 2):
-              if is_free(i * 5 + j, state):
-                return False
-    return True
-
+    # index_row = int(index / 5)
+    # index_col = int(index % 5)
+    # for i in range(index_row - 1, index_row + 2):
+    #     for j in range(index_col - 1, index_col + 2):
+    #           if is_free(i * 5 + j, state):
+    #             return False
+    # return True
+    return is_free(index, state)
+    
 def is_valid_direction(direction, state):
     indices = [6, 7, 8, 13, 18, 17, 16, 11]
     item    = state['map'][indices[direction]]
