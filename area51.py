@@ -95,7 +95,7 @@ def get_actions(state):
 def is_valid_direction(direction, state):
     indices = [6, 7, 8, 11, 13, 16, 17, 18]
     item    = state['map'][indices[direction]]
-    if item['gamer'] == None and item['isBorder'] == False:
+    if ('gamer' not in item or item['gamer'] == None) and item['isBorder'] == False:
         return True
     return False
     
