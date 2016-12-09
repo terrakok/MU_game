@@ -45,9 +45,7 @@ def put_game_actions(currentTurn, actions):
     return json.loads(response.text)
 
 def state2array(state):
-    array = list()
-    for i in range
-
+    pass
 
 def get_actions(state):
     return ["goto1"]
