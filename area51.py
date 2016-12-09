@@ -61,7 +61,7 @@ def print_state2array(state):
     for i in range(5):
         for j in range(5):
             item = state['map'][i * 5 + j]
-            if item['gamer'] != None:
+            if ('gamer' in items) and item['gamer'] != None:
                 if item['gamer'] == "Shrekosaur":
                     sys.stdout.write("X")
                 else:
