@@ -61,29 +61,43 @@ def print_state2array(state):
     for i in range(5):
         for j in range(5):
             item = state['map'][i * 5 + j]
-            if item['isBorder'] == True:
-                sys.stdout.write("#")
-            elif 'object' in item:
-                sys.stdout.write(objects_char[item['object']['name']])
-            elif item['gamer'] != None:
+            if item['gamer'] != None:
                 if item['gamer'] == "Shrekosaur":
                     sys.stdout.write("X")
                 else:
                     sys.stdout.write("g")
+            elif item['isBorder'] == True:
+                sys.stdout.write("#")
+            elif 'object' in item:
+                sys.stdout.write(objects_char[item['object']['name']])
             else:
                 sys.stdout.write("_")
         print("")    
     print("-----------------------")        
 
+current_direction = None
+
 def get_direction(state):
-    index = randint(0, 8)
-    return "goto" + str(index + 1)
+    global current_direction
+    if current_direction == None:
+        current_direction = randint(0, 8)
+    return current_direction
 
 def get_actions(state):
     actions = list()
     direction = get_direction(state)
-    actions.insert(0, direction)
+    while not is_valid_direction(direction, state):
+        direction = get_direction(state)
+        
+    actions.insert(0, "goto" + str(direction + 1))
     return actions
+
+def is_valid_direction(direction, state):
+    indices = [6, 7, 8, 11, 13, 16, 17, 18]
+    item    = state['map'][indices[direction]]
+    if item['gamer'] == None and item['isBorder'] == False:
+        return True
+    return False
     
 if __name__ == "__main__":
     while True:
