@@ -82,16 +82,6 @@ def get_direction(state):
     current_direction = int(current_direction + 1) % int(7)
     return current_direction
 
-def get_actions(state):
-    actions = list()
-    global current_direction
-    direction = current_direction
-    while not is_valid_direction(direction, state):
-        direction = get_direction(state)
-        
-    actions.insert(0, "goto" + str(direction + 1))
-    return actions
-
 def is_shreck(index, state):
     item = state['map'][index]
     if ('gamer' in item) and item['gamer'] != None:
@@ -102,9 +92,15 @@ def is_shreck(index, state):
 def safe_cell(index, state):
     index_row = int(index / 5)
     index_col = int(index % 5)
-    for i in range(index_row - 1, index_row + 1):
-        for j in range(index_col - 1, index_col + 1):
-            if is_shreck(i * 5 + j, state):
+    for i in range(index_row - 1, index_row + 2):
+        for j in range(index_col - 1, index_col + 2):
+            print("safe_cell:", state['map'][i * 5 + j])
+
+    sys.stdout.flush()
+
+    for i in range(index_row - 1, index_row + 2):
+        for j in range(index_col - 1, index_col + 2):
+              if is_shreck(i * 5 + j, state):
                 return False
     return True
 
@@ -116,7 +112,76 @@ def is_valid_direction(direction, state):
        safe_cell(indices[direction], state):
         return True
     return False
+
+def turn_to_safe(state):
+    indices = [6, 7, 8, 13, 18, 17, 16, 11]
+    for i in range(0, 8):
+        print("turn_to_safe:", "(i, indices[i], flag):", i, indices[i], safe_cell(indices[i], state))
+    for i in range(0, 8):
+        if safe_cell(indices[i], state):
+            return "goto" + str(i + 1)
+
+def is_danger_zone(state):
+    return not safe_cell(12, state)
+
+def lookup_danger_zone(state):
+    indices = [6, 7, 8, 13, 18, 17, 16, 11]
+    for i in range(0, 8):
+        if not safe_cell(indices[i], state):
+            return i
+    return None
+
+diff2direction = dict()
+diff2direction[(-1, -1)] = 1
+diff2direction[(-1, +0)] = 2
+diff2direction[(-1, +1)] = 3
+diff2direction[(+0, +1)] = 4
+diff2direction[(+1, +1)] = 5
+diff2direction[(+1, +0)] = 6
+diff2direction[(+1, -1)] = 7
+diff2direction[(+0, -1)] = 8
+
+def lookup_shreck(direction, state):
+    indices = [6, 7, 8, 13, 18, 17, 16, 11]
+    current_index = indices[direction]
+    index_row = int(current_index / 5)
+    index_col = int(current_index % 5)
+    for i in range(index_row - 1, index_row + 2):
+        for j in range(index_col - 1, index_col + 2):
+            if is_shreck(i * 5 + j, state):
+                return diff2direction[(i - 1, j - 1)]
+    print("lookup_shreck: ERRORR!!!")
+    return -1
+                
     
+        
+def get_actions(state):
+    actions = list()
+
+    if is_danger_zone(state):
+        print("get_actions: in danger zone")
+        turn_to_safe_str = turn_to_safe(state)
+        print(turn_to_safe_str)
+        actions.insert(0, turn_to_safe_str)
+    else:
+        print("get_actions: in safe zone")
+        direction = lookup_danger_zone(state)
+        if direction == None:
+            print("get_actions: no danger zone found")
+            global current_direction
+            direction = current_direction
+            while not is_valid_direction(direction, state):
+                direction = get_direction(state)
+            actions.insert(0, "goto" + str(direction + 1))
+        else:
+            print("get_actions: shreck founded (goto and joke)")
+            print("directino = ", direction)
+            actions.append("goto" + str(direction + 1))
+            joke_direction = lookup_shreck(direction, state)
+            print("get_actions: joke_direction:", joke_direction)
+            actions.append("joke" + str(joke_direction + 1))
+    return actions
+
 if __name__ == "__main__":
     while True:
         state = get_game_state()
