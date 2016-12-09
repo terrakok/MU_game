@@ -92,10 +92,28 @@ def get_actions(state):
     actions.insert(0, "goto" + str(direction + 1))
     return actions
 
+def is_shreck(index, state):
+    item = state['map'][index]
+    if ('gamer' in item) and item['gamer'] != None:
+        if item['gamer']['name'] == "Shrekosaur":
+            return True
+    return False
+
+def safe_cell(index, state):
+    index_row = int(index / 5)
+    index_col = int(index % 5)
+    for i in range(index_row - 1, index_row + 1):
+        for j in range(index_col - 1, index_col + 1):
+            if is_shreck(i * 5 + j, state):
+                return False
+    return True
+
 def is_valid_direction(direction, state):
     indices = [6, 7, 8, 13, 18, 17, 16, 11]
     item    = state['map'][indices[direction]]
-    if ('gamer' not in item or item['gamer'] == None) and item['isBorder'] == False:
+    if ('gamer' not in item or item['gamer'] == None) and \
+       item['isBorder'] == False and \
+       safe_cell(indices[direction], state):
         return True
     return False
     
