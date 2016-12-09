@@ -54,6 +54,7 @@ def put_game_actions(currentTurn, actions):
     request['currentTurn'] = currentTurn
     request['actions']     = actions
     request_json = json.dumps(request)
+    print(request_json)
     response = requests.post(get_game_action_url(), headers=get_headers(), data=request_json)
     return json.loads(response.text)
 
@@ -203,7 +204,7 @@ def get_actions(state):
             actions.append("goto" + str(direction + 1))
             joke_direction = lookup_shreck(direction, state)
             print("get_actions: joke_direction:", joke_direction)
-            actions.append("joke" + str(joke_direction + 1))
+            actions.append("joke" + str(joke_direction))
     return actions
 
 if __name__ == "__main__":
