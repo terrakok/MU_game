@@ -61,6 +61,7 @@ if __name__ == "__main__":
             time.sleep(0.5)
             continue
 
+        print("Perform action")
         actions  = get_actions(state)
         response = put_game_actions(state['currentTurn'], actions)
         print(response)
