@@ -3,6 +3,7 @@
 import time
 import requests
 import json
+import ids
 
 ## Ojbects: name -> (mass_gain, humor_gain)
 ## 
@@ -20,29 +21,23 @@ def get_game_state_url():
     return "https://shrek.getmobileup.com/api/game/state"
 
 def get_game_action_url():
-    return "https://shrek.getmobileup.com/api/game/state"
-
-def get_game_id():
-    return "b33b8a50-bddb-11e6-9911-6532d6ea992e-6c1f1dcb-1bd9-4991-9ed4-bbed1a5ca3ba"
-
-def get_droid_id():
-    return "5f4c0d90-bd4d-11e6-b3e3-0911bb93107b-93cf40d2-10d9-4df7-88a8-517de1d89dd2"
+    return "https://shrek.getmobileup.com/api/game/action"
 
 def get_headers():
     return {'Content-type': 'Application/json'}
 
 def get_game_state():
     request = dict()
-    request['gameId']  = get_game_id()
-    request['droidId'] = get_droid_id()
+    request['gameId']  = ids.get_game_id()
+    request['droidId'] = ids.get_droid_id()
     request_json = json.dumps(request)
     response = requests.post(get_game_state_url(), headers=get_headers(), data=request_json)
     return json.loads(response.text)
 
 def put_game_actions(currentTurn, actions):
     request = dict()
-    request['gameId']    = get_game_id()
-    request['droidId']   = get_droid_id()
+    request['gameId']    = ids.get_game_id()
+    request['droidId']   = ids.get_droid_id()
     request['currentId'] = currentTurn
     request['actions']   = actions
     request_json = json.dumps(request)
